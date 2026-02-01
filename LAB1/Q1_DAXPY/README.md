@@ -1,1 +1,1 @@
-
+In this question we have parallelized the DAXPY operation using OpenMP thereby significantly reducing execution time as the number of threads increased. However, after a certain number of threads, speedup saturated due to memory bandwidth limitations and thread management overhead.
