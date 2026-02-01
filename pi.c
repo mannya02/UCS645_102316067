@@ -1,18 +1,19 @@
 #include <stdio.h>
 #include <omp.h>
-static long num_steps = 100000;
+#define STEPS 100000000   
 int main() {
     int i;
     double x, pi, sum = 0.0;
-    double step;
-    step = 1.0 / (double)num_steps;
+    double step = 1.0 / STEPS;
+    double start = omp_get_wtime();
     #pragma omp parallel for private(x) reduction(+:sum)
-    for (i = 0; i < num_steps; i++) {
+    for (i = 0; i < STEPS; i++) {
         x = (i + 0.5) * step;
-        sum = sum + 4.0 / (1.0 + x * x);
+        sum += 4.0 / (1.0 + x * x);
     }
     pi = step * sum;
-    printf("Pi = %f", pi);
+    double end = omp_get_wtime();
+    printf("Calculated value of Pi = %.10f\n", pi);
+    printf("Time taken = %f seconds\n", end - start);
     return 0;
 }
-
