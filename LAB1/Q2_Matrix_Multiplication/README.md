@@ -1,1 +1,1 @@
-
+In this question, the parallel implementation of matrix multiplication showed considerable performance improvement over the serial version. The 2D threading approach achieved better speedup than 1D threading due to improved workload distribution and better cache utilization.
