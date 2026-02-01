@@ -1,1 +1,1 @@
-
+For this question, using OpenMP with reduction enabled efficient parallel computation of π with accurate results. Speedup increased with the number of threads until synchronization and floating-point overhead limited further performance gains.
