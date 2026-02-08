@@ -1,5 +1,4 @@
-# REPORT
-## ASSIGNMENT 2
+# ASSIGNMENT 2 - REPORT
 
 ### 1. Introduction
 
