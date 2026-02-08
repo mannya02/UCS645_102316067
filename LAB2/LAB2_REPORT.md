@@ -65,6 +65,7 @@ Q1:
 | 16      | 0.0267096 | 1.95335 | 0.12209    |
 <img width="800" height="482" alt="Screenshot 2026-02-08 212743" src="https://github.com/user-attachments/assets/abbaa1a4-6995-42f5-afbd-97ee25a9a4af" />
 
+The graph shows that speedup increases initially but saturates after 8–9 threads due to synchronization and atomic overhead.
 
 Q2:
 | Threads | Time (s)   | Speedup | Efficiency | Best Score |
@@ -87,6 +88,7 @@ Q2:
 | 16      | 0.190487   | 0.06789 | 0.00424    | 3000       |
 <img width="745" height="436" alt="Screenshot 2026-02-08 221942" src="https://github.com/user-attachments/assets/4fe4b0a9-a8b2-47f7-8465-c31006403918" />
 
+The graph indicates poor scalability, as speedup drops sharply at higher threads because of strong data dependencies between diagonals.
 
 Q3:
 | Threads | Time (s) | Speedup | Efficiency | Center Value |
@@ -109,6 +111,7 @@ Q3:
 | 16      | 0.276090 | 3.01770 | 0.18861    | 12.0901      |
 <img width="624" height="326" alt="Screenshot 2026-02-08 222548" src="https://github.com/user-attachments/assets/41c06c3e-3704-4940-896f-239f2b797023" />
 
+The graph shows near-linear speedup up to 8–10 threads, confirming that the algorithm scales well due to independent grid computations.
 
 
 ### 6. Discussion
