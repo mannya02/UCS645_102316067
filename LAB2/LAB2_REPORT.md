@@ -42,7 +42,7 @@ Q3 – Heat Diffusion
 
 This problem simulates temperature changes over a 2D grid. Each cell update depends only on neighboring values, allowing independent computations and efficient parallelization.
 
-5. Results
+### 5. Results
 
 Q1:  
 | Threads | Time (s)  | Speedup | Efficiency |
@@ -63,6 +63,7 @@ Q1:
 | 14      | 0.0250472 | 2.08300 | 0.14879    |
 | 15      | 0.0285918 | 1.82477 | 0.12165    |
 | 16      | 0.0267096 | 1.95335 | 0.12209    |
+<img width="800" height="482" alt="Screenshot 2026-02-08 212743" src="https://github.com/user-attachments/assets/abbaa1a4-6995-42f5-afbd-97ee25a9a4af" />
 
 
 Q2:
@@ -84,6 +85,7 @@ Q2:
 | 14      | 0.0376145  | 0.34382 | 0.02456    | 3000       |
 | 15      | 0.0710542  | 0.18201 | 0.01213    | 3000       |
 | 16      | 0.190487   | 0.06789 | 0.00424    | 3000       |
+<img width="745" height="436" alt="Screenshot 2026-02-08 221942" src="https://github.com/user-attachments/assets/4fe4b0a9-a8b2-47f7-8465-c31006403918" />
 
 
 Q3:
@@ -105,6 +107,8 @@ Q3:
 | 14      | 0.254820 | 3.26959 | 0.23354    | 12.0901      |
 | 15      | 0.269135 | 3.09568 | 0.20638    | 12.0901      |
 | 16      | 0.276090 | 3.01770 | 0.18861    | 12.0901      |
+<img width="624" height="326" alt="Screenshot 2026-02-08 222548" src="https://github.com/user-attachments/assets/41c06c3e-3704-4940-896f-239f2b797023" />
+
 
 
 ### 6. Discussion
