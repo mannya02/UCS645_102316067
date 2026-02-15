@@ -37,13 +37,11 @@ int main(int argc, char** argv) {
     if (threads > 0) omp_set_num_threads(threads);
 #endif
 
-    // Generate random input data (deterministic seed for fair perf comparison)
     std::vector<float> data((size_t)ny * (size_t)nx);
     std::mt19937 rng(12345);
     std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
     for (auto &v : data) v = dist(rng);
 
-    // result is ny*ny but only lower triangle used
     std::vector<float> result((size_t)ny * (size_t)ny, 0.0f);
 
     auto t0 = std::chrono::high_resolution_clock::now();
@@ -63,7 +61,6 @@ int main(int argc, char** argv) {
               << " threads=" << used_threads
               << " time_ms=" << ms << "\n";
 
-    // small checksum so compiler can't optimize away compute
     double checksum = 0.0;
     for (int i = 0; i < ny; ++i) checksum += result[i + i * ny];
     std::cout << "checksum(diagonal_sum)=" << checksum << "\n";
