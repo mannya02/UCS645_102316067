@@ -2,9 +2,7 @@
 
 ### Introduction
 
-Correlation matrix computation is a fundamental operation used in data analytics, scientific computing, signal processing, and machine learning. It measures the linear relationship between pairs of vectors and requires significant computational effort for large datasets.
-
-The objective of this lab is to implement three versions of correlation computation:
+Correlation matrix computation is a fundamental operation used in data analytics, scientific computing, signal processing, and machine learning. It measures the linear relationship between pairs of vectors and requires significant computational effort for large datasets. The objective of this lab is to implement three versions of correlation computation:
 
 Sequential baseline implementation.
 
@@ -34,7 +32,7 @@ Covariance is computed for each pair of rows.
 
 Results are stored in the lower triangular matrix.
 
-Mode 0 – Sequential Baseline
+### Mode 0 – Sequential Baseline
 
 In this version:
 
