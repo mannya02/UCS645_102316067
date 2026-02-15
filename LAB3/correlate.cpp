@@ -7,14 +7,10 @@
 #include <omp.h>
 #endif
 
-// Correlation between two vectors A and B:
-// corr = sum((Ai-meanA)*(Bi-meanB)) / sqrt(sum((Ai-meanA)^2) * sum((Bi-meanB)^2))
-
 static inline double safe_sqrt(double x) {
     return (x <= 0.0) ? 0.0 : std::sqrt(x);
 }
 
-// --- Mode 0: simple sequential baseline (correctness first) ---
 static void correlate_seq(int ny, int nx, const float* data, float* result) {
     for (int i = 0; i < ny; ++i) {
         // compute mean and variance for row i (double precision)
@@ -49,10 +45,8 @@ static void correlate_seq(int ny, int nx, const float* data, float* result) {
         }
     }
 }
-
-// --- Mode 1: parallel with OpenMP (coarse-grain parallelism over i,j triangle) ---
 static void correlate_omp(int ny, int nx, const float* data, float* result) {
-    // Precompute means and variances once (big speedup)
+   
     std::vector<double> mean(ny, 0.0), var(ny, 0.0);
 
     #pragma omp parallel for schedule(static)
@@ -69,8 +63,6 @@ static void correlate_omp(int ny, int nx, const float* data, float* result) {
         }
         var[r] = v;
     }
-
-    // Parallelize outer loop; each (i,j) writes unique output cell => safe
     #pragma omp parallel for schedule(dynamic)
     for (int i = 0; i < ny; ++i) {
         for (int j = 0; j <= i; ++j) {
@@ -92,10 +84,7 @@ static void correlate_omp(int ny, int nx, const float* data, float* result) {
     }
 }
 
-// --- Mode 2: optimized (normalize rows once, then dot products) ---
 static void correlate_opt(int ny, int nx, const float* data, float* result) {
-    // Build normalized matrix Z where each row has mean 0 and L2 norm 1
-    // Then corr(i,j) = dot(Zi, Zj)
     std::vector<double> Z((size_t)ny * (size_t)nx);
     std::vector<double> norm(ny, 0.0);
 
@@ -125,14 +114,12 @@ static void correlate_opt(int ny, int nx, const float* data, float* result) {
         }
     }
 
-    // Compute lower triangle correlations via dot products
     #pragma omp parallel for schedule(dynamic)
     for (int i = 0; i < ny; ++i) {
         const double* zi = &Z[(size_t)i * (size_t)nx];
         for (int j = 0; j <= i; ++j) {
             const double* zj = &Z[(size_t)j * (size_t)nx];
 
-            // manual unroll for better instruction-level parallelism
             double sum0 = 0.0, sum1 = 0.0, sum2 = 0.0, sum3 = 0.0;
             int x = 0;
             for (; x + 3 < nx; x += 4) {
