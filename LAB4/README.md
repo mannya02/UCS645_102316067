@@ -100,8 +100,13 @@ Sample Performance Table for Ex 4.
 |             4 |    0.000033 |              1.242 |                0.311 |
 |             8 |    0.000092 |              0.446 |                0.056 |
 
+
 Graphs:
+
+
 <img width="606" height="364" alt="Screenshot 2026-02-22 225403" src="https://github.com/user-attachments/assets/97b3031f-cf45-4f1c-9b3f-7bdf0c5b6345" />
+
+
 <img width="595" height="346" alt="Screenshot 2026-02-22 225457" src="https://github.com/user-attachments/assets/39d37bd1-dd2d-450f-9d97-2e6597468edc" />
 
 
