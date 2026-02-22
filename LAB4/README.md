@@ -69,7 +69,7 @@ Vector B = [8,7,6,5,4,3,2,1]
 Expected Result = 120
 
 Results
-Processes	Dot Product
+
 | Processes | Dot Product |
 | --------- | ----------- |
 | 1         | 120         |
