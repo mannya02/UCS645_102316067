@@ -6,451 +6,143 @@
 
 This assignment investigates the principles of parallel and distributed computing using the Message Passing Interface (MPI). The objective is to understand how computational problems behave under parallel execution and to evaluate scalability, communication overhead, synchronization cost, and load balancing strategies.
 
-### Theoretical Background
-2.1 Parallel Speedup
+### Theory
+##### Parallel Speedup
 
 Speedup is defined as:
 
-𝑆
-(
-𝑝
-)
-=
-𝑇
-1
-𝑇
-𝑝
-S(p)=
-T
-p
+S(p)=T1​/Tp​​
 	​
-
-T
-1
-	​
-
-	​
-
-
 Where:
 
-𝑇
-1
-T
-1
-	​
+𝑇1 = serial execution time
 
- = serial execution time
-
-𝑇
-𝑝
-T
-p
-	​
-
- = parallel execution time with p processes
+𝑇𝑝 = parallel execution time with p processes
 
 Ideal speedup is linear:
-
-𝑆
-(
-𝑝
-)
-=
-𝑝
-S(p)=p
+𝑆(𝑝)=𝑝
 
 However, in real systems, speedup is limited by communication and synchronization overhead.
 
-2.2 Efficiency
-𝐸
-(
-𝑝
-)
-=
-𝑆
-(
-𝑝
-)
-𝑝
-E(p)=
-p
-S(p)
+##### Efficiency
+𝐸(𝑝)=𝑆(𝑝)/𝑝
 	​
-
-
 Efficiency measures how effectively processes are utilized.
 
-2.3 Amdahl’s Law
+ ##### Amdahl’s Law
 
 Amdahl’s Law states that the maximum theoretical speedup is limited by the serial portion of a program:
 
-𝑆
-(
-𝑝
-)
-=
-1
-𝑓
-+
-1
-−
-𝑓
-𝑝
-S(p)=
-f+
-p
-1−f
-	​
-
-1
-	​
-
+𝑆(𝑝)=1/(𝑓+(1−(𝑓/𝑝)))
 
 Where:
 
-𝑓
-f = fraction of serial work
+𝑓 = fraction of serial work
 
 This explains why speedup eventually saturates as processes increase.
 
-3. Theoretical Discussion per Problem
-Q1 – DAXPY (Data Parallelism)
-Computational Nature
+#### Q1 – DAXPY (Data Parallelism)
 
-Regular data parallel problem.
+###### Description
+Implements the operation:
+X[i]=a⋅X[i]+Y[i]
 
-Requires data distribution (Scatter) and collection (Gather).
+The data is divided among processes using:
 
-Theoretical Behavior
+MPI_Scatter
 
-The total execution time can be modeled as:
+Local computation
 
-𝑇
-𝑝
-=
-𝑇
-𝑠
-𝑐
-𝑎
-𝑡
-𝑡
-𝑒
-𝑟
-+
-𝑇
-𝑐
-𝑜
-𝑚
-𝑝
-𝑢
-𝑡
-𝑒
-+
-𝑇
-𝑔
-𝑎
-𝑡
-ℎ
-𝑒
-𝑟
-T
-p
-	​
+MPI_Gather
 
-=T
-scatter
-	​
+###### Observations
 
-+T
-compute
-	​
+Performance improvement is limited.
 
-+T
-gather
-	​
+Communication overhead (Scatter/Gather) impacts scalability.
 
+Small data size reduces parallel efficiency.
 
-Even though computation reduces proportionally to 
-1
-/
-𝑝
-1/p, communication cost does not reduce.
+###### Inference
 
-Scalability Analysis
+Parallelization is less effective for small problem sizes due to communication cost dominating computation.
 
-If computation time is small compared to communication, speedup will be limited.
+#### Q2 – Broadcast Race (MyBcast vs MPI_Bcast)
+###### Description
 
-For small vector sizes, communication dominates.
+Two broadcast methods were compared:
 
-For very large vectors, computation dominates, improving scalability.
+Manual broadcast using MPI_Send and MPI_Recv
 
-Conclusion
+Optimized MPI_Bcast
 
-DAXPY demonstrates that parallel efficiency strongly depends on the compute-to-communication ratio.
+###### Observations
 
-Q2 – Broadcast Race
-Manual Broadcast
+Manual broadcast time increases significantly as processes increase.
 
-Manual implementation performs:
+MPI_Bcast performs much better due to tree-based communication.
 
-𝑃
-−
-1
- point-to-point sends
-P−1 point-to-point sends
+###### Inference
 
-Time complexity:
+Built-in collective communication (MPI_Bcast) is more scalable and efficient than manual implementation.
 
-𝑂
-(
-𝑃
-)
-O(P)
+#### Q3 – Distributed Dot Product
+###### Description
+
+Total dot product of a large dataset (500 million operations) was computed using:
+
 MPI_Bcast
 
-MPI uses optimized tree-based or pipeline algorithms:
-
-𝑂
-(
-log
-⁡
-𝑃
-)
-O(logP)
-Theoretical Implication
+Local computation
 
-As process count increases:
+MPI_Reduce
 
-Manual broadcast time increases linearly.
+###### Observations
 
-MPI_Bcast increases logarithmically.
+Good speedup achieved.
 
-Conclusion
-
-Collective operations provided by MPI are optimized and scale significantly better than manual implementations.
-
-Q3 – Distributed Dot Product
-Computational Nature
-
-Embarrassingly parallel problem.
-
-Minimal communication.
-
-One broadcast + one reduction.
-
-Time Model
-𝑇
-𝑝
-=
-𝑇
-𝑏
-𝑟
-𝑜
-𝑎
-𝑑
-𝑐
-𝑎
-𝑠
-𝑡
-+
-𝑇
-𝑐
-𝑜
-𝑚
-𝑝
-𝑢
-𝑡
-𝑒
-𝑝
-+
-𝑇
-𝑟
-𝑒
-𝑑
-𝑢
-𝑐
-𝑒
-T
-p
-	​
-
-=T
-broadcast
-	​
-
-+
-p
-T
-compute
-	​
-
-	​
-
-+T
-reduce
-	​
-
-
-Since computation dominates (500 million operations), communication overhead is relatively small.
-
-Scalability
-
-Near-linear speedup achievable.
-
-Eventually limited by reduction overhead and memory bandwidth.
-
-Conclusion
-
-Dot product represents an ideal parallel workload with strong scalability characteristics.
-
-Q4 – Prime Number Search (Dynamic Scheduling)
-Workload Characteristics
-
-Non-uniform workload.
-
-Some numbers require more computation than others.
-
-Static vs Dynamic Partitioning
+Communication cost is low compared to computation.
 
-Static partitioning → load imbalance.
-
-Dynamic master–slave → better resource utilization.
-
-Theoretical Time
-𝑇
-𝑝
-=
-𝑇
-𝑐
-𝑜
-𝑚
-𝑝
-𝑢
-𝑡
-𝑒
-/
-𝑝
-+
-𝑇
-𝑐
-𝑜
-𝑚
-𝑚
-𝑢
-𝑛
-𝑖
-𝑐
-𝑎
-𝑡
-𝑖
-𝑜
-𝑛
-+
-𝑇
-𝑐
-𝑜
-𝑜
-𝑟
-𝑑
-𝑖
-𝑛
-𝑎
-𝑡
-𝑖
-𝑜
-𝑛
-T
-p
-	​
+###### Inference
 
-=T
-compute
-	​
+This problem shows strong scalability due to high compute-to-communication ratio.
 
-/p+T
-communication
-	​
+#### Q4 – Prime Number Search (Master–Slave)
+###### Description
 
-+T
-coordination
-	​
+Dynamic scheduling was implemented:
 
+Master assigns numbers
 
-As p increases:
+Slaves test primality
 
-Compute term decreases.
+Results returned dynamically
 
-Coordination overhead increases.
+###### Observations
 
-Master may become bottleneck.
+Good load balancing.
 
-Conclusion
+Execution time decreases as processes increase.
 
-Dynamic scheduling improves load balance but introduces central coordination cost.
+At high process count, master becomes bottleneck.
 
-Q5 – Perfect Number Search
-Computational Nature
+###### Inference
 
-Divisor summation per number.
+Dynamic scheduling improves efficiency but scalability is limited by centralized coordination.
 
-Higher computational intensity per task.
+#### Q5 – Perfect Number Search (Master–Slave)
+###### Description
 
-Workload irregularity.
+Similar to Q4 but checks for perfect numbers by computing divisor sums.
 
-Behavior
+###### Observations
 
-Similar to Q4 but with heavier per-task computation.
+Heavier computation than prime testing.
 
-Scalability
+Parallelization reduces time significantly.
 
-Better scaling than light workloads.
+Master bottleneck appears at higher process counts.
 
-Eventually limited by master communication and synchronization.
+###### Inference
 
-Conclusion
-
-Master–slave architecture provides flexibility but does not scale infinitely.
-
-4. Comparative Theoretical Insights
-Problem	Compute Intensity	Communication	Scalability
-Q1	Low–Moderate	High (Scatter/Gather)	Limited
-Q2	Low	Communication-dominated	MPI_Bcast scales well
-Q3	High	Very Low	Strong scaling
-Q4	Moderate	Frequent coordination	Medium
-Q5	High	Frequent coordination	Medium
-5. Overall Conclusions
-
-Scalability depends primarily on compute-to-communication ratio.
-
-Collective MPI operations are more efficient than manual message passing.
-
-Embarrassingly parallel problems scale better.
-
-Master–slave models improve load balance but introduce central bottlenecks.
-
-Amdahl’s Law limits achievable speedup.
-
-6. Graphs to Include
-
-For a strong theoretical submission, include:
-
-1. Execution Time vs Processes (All Problems)
-
-Shows scalability trend.
-
-2. Speedup vs Processes (Q1 & Q3)
-
-Include ideal linear speedup line for comparison.
-
-3. Manual vs MPI_Bcast Comparison (Q2)
-
-Clearly demonstrates algorithmic complexity difference.
-
-4. Efficiency vs Processes (Optional but recommended)
-
-Shows diminishing returns.
-
-7. Final Theoretical Statement
-
-This assignment demonstrates that parallel performance is governed not only by computation division but also by communication overhead, synchronization cost, load balancing strategy, and inherent serial components of the algorithm. Effective parallel design requires minimizing communication while maximizing independent computation.
+Dynamic master–slave approach improves utilization but does not scale infinitely.
