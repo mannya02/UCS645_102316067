@@ -20,11 +20,13 @@ Where:
 𝑇𝑝 = parallel execution time with p processes
 
 Ideal speedup is linear:
+
 𝑆(𝑝)=𝑝
 
 However, in real systems, speedup is limited by communication and synchronization overhead.
 
 ##### Efficiency
+
 𝐸(𝑝)=𝑆(𝑝)/𝑝
 	​
 Efficiency measures how effectively processes are utilized.
@@ -44,6 +46,7 @@ This explains why speedup eventually saturates as processes increase.
 #### Q1 – DAXPY (Data Parallelism)
 
 ###### Description
+
 Implements the operation:
 X[i]=a⋅X[i]+Y[i]
 
@@ -72,15 +75,15 @@ MPI_Gather
 
 ###### Observations
 
-Performance improvement is limited.
+<img width="597" height="364" alt="image" src="https://github.com/user-attachments/assets/ea0af65f-ebb0-4b4a-8131-cc18ba284634" />
 
-Communication overhead (Scatter/Gather) impacts scalability.
+Best performance at NP=2.
 
-Small data size reduces parallel efficiency.
+Performance degrades significantly at NP=4 and NP=8.
 
 ###### Inference
 
-Parallelization is less effective for small problem sizes due to communication cost dominating computation.
+For small data sizes, communication overhead (Scatter/Gather) dominates computation, causing poor scalability at higher process counts.
 
 #### Q2 – Broadcast Race (MyBcast vs MPI_Bcast)
 ###### Description
@@ -91,12 +94,6 @@ Manual broadcast using MPI_Send and MPI_Recv
 
 Optimized MPI_Bcast
 
-###### Observations
-
-Manual broadcast time increases significantly as processes increase.
-
-MPI_Bcast performs much better due to tree-based communication.
-
 ###### Output
 
 | Processes (NP) | Manual (seconds) | MPI_Bcast (seconds) |
@@ -106,10 +103,17 @@ MPI_Bcast performs much better due to tree-based communication.
 | 6              | 0.120855         | 0.125833            |
 | 8              | 0.211277         | 0.078700            |
 
+###### Observations
+
+<img width="492" height="293" alt="image" src="https://github.com/user-attachments/assets/eb77baae-4c70-40fb-9f96-da0b2a257407" />
+
+Manual broadcast time increases steadily as NP increases.
+
+MPI_Bcast is significantly faster at NP=8.
 
 ###### Inference
 
-Built-in collective communication (MPI_Bcast) is more scalable and efficient than manual implementation.
+MPI_Bcast scales better than manual broadcast because it uses optimized tree-based communication instead of linear sends.
 
 #### Q3 – Distributed Dot Product
 ###### Description
@@ -138,13 +142,15 @@ MPI_Reduce
 
 ###### Observations
 
-Good speedup achieved.
+<img width="489" height="291" alt="image" src="https://github.com/user-attachments/assets/c9f56d76-51b0-4960-ade4-8850a4ed6c4f" />
 
-Communication cost is low compared to computation.
+Strong speedup from NP=1 to NP=4.
+
+Performance decreases at NP=8.
 
 ###### Inference
 
-This problem shows strong scalability due to high compute-to-communication ratio.
+High computation-to-communication ratio gives good scalability initially, but synchronization and reduction overhead limit performance at higher processes.
 
 #### Q4 – Prime Number Search (Master–Slave)
 ###### Description
@@ -170,15 +176,14 @@ Results returned dynamically
 
 ###### Observations
 
-Good load balancing.
 
-Execution time decreases as processes increase.
+Parallel execution is slower than serial.
 
-At high process count, master becomes bottleneck.
+Slight improvement from NP=2 to NP=4/8.
 
 ###### Inference
 
-Dynamic scheduling improves efficiency but scalability is limited by centralized coordination.
+Frequent communication between master and slaves introduces overhead, making parallel execution inefficient for this problem size.
 
 #### Q5 – Perfect Number Search (Master–Slave)
 ###### Description
@@ -199,12 +204,16 @@ Similar to Q4 but checks for perfect numbers by computing divisor sums.
 
 ###### Observations
 
-Heavier computation than prime testing.
+<img width="498" height="295" alt="image" src="https://github.com/user-attachments/assets/8cad9d45-8e0d-4cf5-922d-812834bab5dc" />
 
-Parallelization reduces time significantly.
+Parallel initially slower than serial.
 
-Master bottleneck appears at higher process counts.
+Performance improves significantly at NP=6 and NP=8.
 
 ###### Inference
 
-Dynamic master–slave approach improves utilization but does not scale infinitely.
+As workload increases, parallel computation begins to offset communication overhead, improving scalability.
+
+#### Conclusion
+
+This assignment demonstrates that parallel performance is highly dependent on the balance between computation and communication. While computation-heavy tasks such as distributed dot product exhibit strong scalability, communication-intensive tasks suffer from overhead that limits speedup. The broadcast comparison confirms that optimized collective operations outperform manual message passing. Additionally, dynamic master–slave models improve load balancing but introduce coordination bottlenecks. Overall, the results validate Amdahl’s Law, showing that increasing process count does not guarantee proportional speedup due to inherent serial components and communication overhead.
