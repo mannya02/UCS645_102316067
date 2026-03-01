@@ -55,6 +55,21 @@ Local computation
 
 MPI_Gather
 
+###### Outputs
+
+| Version | Time (seconds) |
+| ------- | -------------- |
+| Serial  | 0.000213       |
+
+
+| Processes (NP) | Time (seconds) |
+| -------------- | -------------- |
+| 1              | 0.000224       |
+| 2              | 0.000139       |
+| 4              | 0.006450       |
+| 8              | 0.035673       |
+
+
 ###### Observations
 
 Performance improvement is limited.
@@ -82,6 +97,16 @@ Manual broadcast time increases significantly as processes increase.
 
 MPI_Bcast performs much better due to tree-based communication.
 
+###### Output
+
+| Processes (NP) | Manual (seconds) | MPI_Bcast (seconds) |
+| -------------- | ---------------- | ------------------- |
+| 2              | 0.025098         | 0.022356            |
+| 4              | 0.068553         | 0.087492            |
+| 6              | 0.120855         | 0.125833            |
+| 8              | 0.211277         | 0.078700            |
+
+
 ###### Inference
 
 Built-in collective communication (MPI_Bcast) is more scalable and efficient than manual implementation.
@@ -96,6 +121,20 @@ MPI_Bcast
 Local computation
 
 MPI_Reduce
+
+##### Output
+| Version | Time (seconds) |
+| ------- | -------------- |
+| Serial  | 0.969270       |
+
+
+| Processes (NP) | Time (seconds) |
+| -------------- | -------------- |
+| 1              | 1.098865       |
+| 2              | 0.565433       |
+| 4              | 0.312094       |
+| 8              | 0.492262       |
+
 
 ###### Observations
 
@@ -118,6 +157,17 @@ Slaves test primality
 
 Results returned dynamically
 
+###### Output
+| Version | Time (seconds) |
+| ------- | -------------- |
+| Serial  | 0.019546       |
+
+| Processes (NP) | Time (seconds) |
+| -------------- | -------------- |
+| 2              | 0.285959       |
+| 4              | 0.194860       |
+| 8              | 0.194034       |
+
 ###### Observations
 
 Good load balancing.
@@ -134,6 +184,18 @@ Dynamic scheduling improves efficiency but scalability is limited by centralized
 ###### Description
 
 Similar to Q4 but checks for perfect numbers by computing divisor sums.
+
+###### Output
+| Version | Time (seconds) |
+| ------- | -------------- |
+| Serial  | 0.113418       |
+
+| Processes (NP) | Time (seconds) |
+| -------------- | -------------- |
+| 2              | 0.333947       |
+| 4              | 0.279995       |
+| 6              | 0.139397       |
+| 8              | 0.141374       |
 
 ###### Observations
 
