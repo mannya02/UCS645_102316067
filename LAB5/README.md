@@ -13,6 +13,7 @@ Speedup is defined as:
 
 S(p)=T1​/Tp​​
 	​
+
 Where:
 
 𝑇1 = serial execution time
@@ -29,6 +30,7 @@ However, in real systems, speedup is limited by communication and synchronizatio
 
 𝐸(𝑝)=𝑆(𝑝)/𝑝
 	​
+
 Efficiency measures how effectively processes are utilized.
 
  ##### Amdahl’s Law
@@ -36,6 +38,7 @@ Efficiency measures how effectively processes are utilized.
 Amdahl’s Law states that the maximum theoretical speedup is limited by the serial portion of a program:
 
 𝑆(𝑝)=1/(𝑓+(1−(𝑓/𝑝)))
+
 
 Where:
 
