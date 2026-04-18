@@ -1,0 +1,2 @@
+## INFERENCE
+Matrix addition using CUDA shows efficient parallel execution where each GPU thread computes one element using C[i][j]=A[i][j]+B[i][j]. The total number of operations is N×N, with two global memory reads and one write per element. Compared to CPU execution, the CUDA implementation performs computations concurrently across thousands of threads, resulting in faster execution. This demonstrates the effectiveness of GPU acceleration for data-parallel tasks like matrix operations.
