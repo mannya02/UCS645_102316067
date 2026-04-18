@@ -1,0 +1,2 @@
+## INFERENCE
+This task highlights the performance difference between CPU and CUDA-based GPU execution. In the CPU approach, elements are processed sequentially, leading to higher execution time for large inputs. In contrast, the CUDA implementation distributes the computation across multiple GPU threads and uses parallel reduction, significantly reducing execution time. This demonstrates that CUDA provides substantial speedup over CPU for large-scale data processing.
