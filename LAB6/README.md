@@ -29,8 +29,8 @@ CUDA execution is much faster than CPU for large arrays due to parallel processi
 
 #### Performance Comparison (Array Sum)
 Implementation	Time 
-CPU |	0.00410134 seconds
-CUDA|	0.000251 seconds
+| CPU |	0.00410134 seconds |
+| CUDA|	0.000251 seconds |
 
 ### Q3: Matrix Addition (CPU vs CUDA)
 #### Problem Description
@@ -58,8 +58,8 @@ Matrix addition is highly parallelizable, and CUDA achieves faster execution com
 
 #### Performance Comparison (Matrix Addition)
 Implementation	Time 
-CPU |	0.02287272 sec
-CUDA|	0.012951 seconds
+| CPU |	0.02287272 seconds |
+| CUDA|	0.012951 seconds |
 
  ### Conclusion
 
